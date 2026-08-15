@@ -1,0 +1,11 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "portfolio",
+      "runtimeExecutable": "python3",
+      "runtimeArgs": ["/private/tmp/claude-501/-Users-user-Desktop-portfolio/0f3814b3-aae0-4419-b01a-1111db955f45/scratchpad/serve_site.py"],
+      "port": 4321
+    }
+  ]
+}

@@ -101,9 +101,39 @@
     });
   }
 
+  /* ---- Click-to-play YouTube ----
+     Nothing is requested from YouTube until the visitor clicks: no third-party
+     cookie, no iframe, no thumbnail fetch (the poster is a local image).
+     The iframe uses youtube-nocookie.com. */
+  function setupVideo() {
+    document.querySelectorAll(".js-yt").forEach((host) => {
+      const btn = host.querySelector(".video__play");
+      if (!btn) return;
+      btn.addEventListener("click", () => {
+        const id = host.dataset.ytId;
+        if (!id) return;
+        const iframe = document.createElement("iframe");
+        iframe.src =
+          "https://www.youtube-nocookie.com/embed/" +
+          encodeURIComponent(id) +
+          "?autoplay=1&rel=0";
+        iframe.title = host.dataset.ytTitle || "Video";
+        iframe.allow =
+          "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share";
+        iframe.referrerPolicy = "strict-origin-when-cross-origin";
+        iframe.allowFullscreen = true;
+        host.innerHTML = "";
+        // drops the poster veil/label overlay once the player is in
+        host.classList.add("is-playing");
+        host.appendChild(iframe);
+      });
+    });
+  }
+
   document.addEventListener("DOMContentLoaded", () => {
     document.querySelectorAll(".js-constellations").forEach(buildConstellations);
     setupMarquee();
     setupReveal();
+    setupVideo();
   });
 })();

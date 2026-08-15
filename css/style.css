@@ -24,10 +24,18 @@
   --sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
 
   /* Layout */
-  --maxw: 1120px;
+  --maxw: 1120px;         /* default page width (home) */
+  --maxw-proj: 1400px;    /* wider on project pages so wide screens breathe */
   --pad: clamp(1.25rem, 5vw, 2.5rem);
   --radius: 16px;
   --shadow: 0 18px 40px -24px rgba(13, 17, 48, 0.45);
+
+  /* Project-page content-width hierarchy (three tiers).
+     text  → paragraphs (kept readable)
+     mid   → section titles, lists, "hard/learn" blocks
+     media → galleries, video, key-figures row (fills the main column) */
+  --w-text: 65ch;
+  --w-mid: 46rem;
 
   --ease: cubic-bezier(0.22, 1, 0.36, 1);
 }
@@ -200,6 +208,12 @@ h1, h2, h3 { font-family: var(--serif); font-weight: 500; line-height: 1.12; let
 .card__index {
   font-family: var(--serif); font-size: 3.4rem; color: rgba(175,169,236,0.5); line-height: 1; position: relative; z-index: 1;
 }
+/* photo thumbnail: scrim keeps the index number legible over the image */
+.card__thumb--photo::after {
+  content: ""; position: absolute; inset: 0; z-index: 1;
+  background: linear-gradient(to top, rgba(26,22,64,0.72) 0%, rgba(26,22,64,0.25) 45%, rgba(26,22,64,0.05) 100%);
+}
+.card__thumb--photo .card__index { z-index: 2; color: #fff; text-shadow: 0 2px 12px rgba(26,22,64,0.6); }
 .card__body { padding: 1.5rem 1.5rem 1.7rem; display: flex; flex-direction: column; gap: 0.6rem; flex: 1; }
 .card__tag {
   align-self: flex-start; font-size: 0.72rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase;
@@ -225,7 +239,34 @@ h1, h2, h3 { font-family: var(--serif); font-weight: 500; line-height: 1.12; let
 .vol h4 { font-family: var(--serif); font-weight: 600; font-size: 1.12rem; color: var(--violet-deep); }
 .vol p { color: var(--ink-soft); font-size: 0.95rem; margin-top: 0.25rem; }
 .vol .years { font-weight: 600; color: var(--violet); }
+/* discreet supporting visual — deliberately small so volunteering stays
+   secondary to the project cards above */
+.vol__shot { margin: 0 0 0 auto; flex: 0 0 84px; max-width: 84px; }
+.vol__shot img {
+  display: block; width: 100%; height: auto; aspect-ratio: 3 / 4; object-fit: cover;
+  border-radius: 10px; border: 1px solid rgba(38,33,92,0.08);
+}
+.vol__shot figcaption {
+  color: var(--ink-soft); font-size: 0.7rem; line-height: 1.35; margin-top: 0.4rem;
+}
 @media (min-width: 760px) { .volunteer__grid { grid-template-columns: 1fr 1fr; } }
+@media (min-width: 480px) { .vol__shot { flex-basis: 104px; max-width: 104px; } }
+
+/* Volunteering lead sits on one line on desktop (the default 52ch measure
+   would break this ~70-char sentence in two); still wraps gracefully on mobile */
+.volunteer .section-head { max-width: 42rem; }
+.volunteer .section-head p { text-wrap: pretty; }
+
+/* Level 2 — associative volunteering: deliberately secondary. No card, no
+   visual, reduced type; a quiet supporting note under the event cards. */
+.vol-beyond { margin-top: 2.4rem; padding-top: 1.6rem; border-top: 1px solid rgba(38,33,92,0.1); }
+.vol-beyond__title {
+  font-family: var(--sans); font-weight: 600; font-size: 0.78rem; letter-spacing: 0.14em;
+  text-transform: uppercase; color: var(--violet); margin-bottom: 0.9rem;
+}
+.vol-beyond__list { list-style: none; display: grid; gap: 0.5rem; max-width: 60ch; }
+.vol-beyond__list li { color: var(--ink-soft); font-size: 0.92rem; line-height: 1.5; }
+.vol-beyond__name { font-weight: 600; color: var(--violet-deep); }
 
 /* ---------- About ---------- */
 .about { background: var(--cream); }
@@ -235,7 +276,15 @@ h1, h2, h3 { font-family: var(--serif); font-weight: 500; line-height: 1.12; let
   background: #0D1130; /* hero night blue — the cut-out portrait sits on the charter's ground */
   box-shadow: var(--shadow); max-width: 360px;
 }
-.about__photo img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: center top; }
+.about__photo img {
+  display: block; width: 100%; height: 100%; object-fit: cover; object-position: center top;
+  /* the cut-out has empty margins baked in — scale up from the top so the shoulders reach the frame */
+  transform: scale(1.28); transform-origin: center top;
+}
+.about__photo::after {
+  content: ""; position: absolute; inset: auto 0 0 0; height: 18%; pointer-events: none;
+  background: linear-gradient(to bottom, rgba(13, 17, 48, 0) 0%, #0D1130 100%);
+}
 .about h2 { color: var(--violet-deep); font-size: clamp(1.9rem, 4.5vw, 2.9rem); }
 .about__bio { margin-top: 1.3rem; }
 .about__bio p { color: var(--ink-soft); margin-top: 0.9rem; max-width: 56ch; }
@@ -272,10 +321,13 @@ h1, h2, h3 { font-family: var(--serif); font-weight: 500; line-height: 1.12; let
 .footer a { color: var(--violet-light); text-decoration: none; }
 .footer a:hover { text-decoration: underline; }
 
-/* ---------- Scroll reveal ---------- */
-.reveal { opacity: 0; transform: translateY(22px); transition: opacity 0.7s var(--ease), transform 0.7s var(--ease); }
-.reveal.is-visible { opacity: 1; transform: none; }
-@media (prefers-reduced-motion: reduce) { .reveal { opacity: 1; transform: none; } }
+/* ---------- Scroll reveal ----------
+   The fade is opt-in: it only applies once JS has set .js on <html>.
+   Without JS (or if a script fails) content renders fully visible —
+   nothing is ever hidden behind a script that may not run. */
+.js .reveal { opacity: 0; transform: translateY(22px); transition: opacity 0.7s var(--ease), transform 0.7s var(--ease); }
+.js .reveal.is-visible { opacity: 1; transform: none; }
+@media (prefers-reduced-motion: reduce) { .js .reveal { opacity: 1; transform: none; } }
 
 /* ---------- i18n visibility helper ---------- */
 [data-i18n], [data-i18n-html] { }
@@ -306,13 +358,42 @@ h1, h2, h3 { font-family: var(--serif); font-weight: 500; line-height: 1.12; let
 .proj-hero .meta b { color: var(--off-white); font-weight: 600; }
 
 .proj-body { background: var(--cream); }
+/* Two-column layout on desktop: a wide content column + a narrow sticky
+   recap rail. The content column is wider than the text inside it, so media
+   and figures overflow the reading measure instead of leaving an empty gap.
+   The aside comes FIRST in the DOM, so on mobile it stacks on top; on desktop
+   explicit grid placement moves it to the right-hand column. */
 .proj-layout { display: grid; gap: 2.5rem; grid-template-columns: 1fr; }
-.proj-main h2 { color: var(--violet-deep); font-size: 1.55rem; margin-bottom: 0.8rem; margin-top: 2.2rem; }
-.proj-main h2:first-child { margin-top: 0; }
-.proj-main p { color: var(--ink-soft); max-width: 62ch; }
-.proj-main ul { list-style: none; margin-top: 0.5rem; display: grid; gap: 0.7rem; max-width: 62ch; }
+@media (min-width: 980px) {
+  .proj-layout { grid-template-columns: minmax(0, 1fr) 288px; column-gap: 3.5rem; align-items: start; }
+  .proj-main { grid-column: 1; grid-row: 1; min-width: 0; }
+  .proj-aside { grid-column: 2; grid-row: 1; position: sticky; top: 88px; align-self: start; }
+}
+/* Section rhythm: the gap ABOVE a heading (3.8rem) is deliberately much
+   larger than the gap between two paragraphs (1.1rem), so each h2 reads as
+   the start of a distinct block rather than a line of the previous one. */
+.proj-main h2 { color: var(--violet-deep); font-size: 1.55rem; margin-bottom: 1rem; margin-top: 0; max-width: var(--w-mid); }
+/* Each section is a .reveal wrapper; spacing lives on the wrapper so it
+   applies even though every h2 is its wrapper's first child. */
+.proj-main > .reveal { margin-top: 3.8rem; }
+.proj-main > .reveal:first-child { margin-top: 0; }
+/* Media fills the full main column (--measure: 100%); text and list/blocks are
+   held to narrower tiers so media visibly overflows the reading column. */
+.proj-main { --measure: 100%; }
+.proj-main p { color: var(--ink-soft); max-width: var(--w-text); margin-bottom: 1.1rem; }
+.proj-main p:last-child { margin-bottom: 0; }
+.proj-main ul { list-style: none; margin-top: 0.5rem; margin-bottom: 1.1rem; display: grid; gap: 0.7rem; max-width: var(--w-mid); }
 .proj-main ul li { position: relative; padding-left: 1.6rem; color: var(--ink); }
 .proj-main ul li::before { content: "✦"; position: absolute; left: 0; top: 0.05em; color: var(--violet); font-size: 0.85em; }
+
+/* "The hard parts" — challenge/response items: label as subheading, text below */
+.hard { display: grid; gap: 1.7rem; max-width: var(--w-mid); }
+.hard__item { padding-left: 1.1rem; border-left: 2px solid rgba(127,119,221,0.35); }
+.hard__item h3 {
+  font-family: var(--serif); font-weight: 600; font-size: 1.16rem; line-height: 1.25;
+  color: var(--violet-deep); margin-bottom: 0.5rem;
+}
+.hard__item p { margin-bottom: 0; }
 
 .stats { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; margin: 1.5rem 0 0.5rem; }
 .stat { background: #fff; border: 1px solid rgba(38,33,92,0.08); border-radius: 14px; padding: 1.2rem 1.3rem; }
@@ -332,16 +413,112 @@ h1, h2, h3 { font-family: var(--serif); font-weight: 500; line-height: 1.12; let
 .shot .star { display: block; font-size: 1.6rem; margin-bottom: 0.4rem; color: var(--violet-light); }
 @media (min-width: 640px) { .gallery { grid-template-columns: 1fr 1fr; } }
 
+/* ---- real photo figures ----
+   Portrait shots are shown whole: no forced crop, height follows the
+   image's own proportions. Gallery, figures and video all share the same
+   62ch measure and 14px radius so the column stays aligned. */
+/* Media span the same measure as the text: edges align exactly.
+   Two photos side by side on desktop, single column on mobile. */
+.gallery--photos { grid-template-columns: 1fr; max-width: var(--measure); margin-bottom: 2.4rem; }
+@media (min-width: 640px) { .gallery--photos { grid-template-columns: 1fr 1fr; align-items: stretch; } }
+/* Portraits differ in ratio; give the image area one shared height so the two
+   figures end on the same line instead of leaving a ragged bottom edge. */
+@media (min-width: 640px) {
+  .gallery--photos figure.shot { display: flex; flex-direction: column; }
+  .gallery--photos figure.shot img { height: 380px; object-fit: contain; }
+  .gallery--photos figure.shot figcaption { margin-top: auto; }
+}
+figure.shot {
+  aspect-ratio: auto; display: block; padding: 0; text-align: left;
+  border: 1px solid rgba(38,33,92,0.09); background: var(--off-white); margin: 0;
+  max-width: 100%; border-radius: 14px; overflow: hidden;
+}
+figure.shot img {
+  position: static; inset: auto; display: block; width: 100%; height: auto;
+  aspect-ratio: auto; object-fit: contain;
+  border-radius: 14px 14px 0 0;
+}
+figure.shot figcaption {
+  color: var(--ink-soft); font-size: 0.82rem; line-height: 1.45; padding: 0.6rem 0.85rem 0.75rem;
+}
+
+/* ---------- click-to-play video ---------- */
+.video { margin: 1.6rem 0 0; max-width: var(--measure); }
+.video__embed {
+  position: relative; aspect-ratio: 16 / 9; border-radius: 14px; overflow: hidden;
+  background: linear-gradient(135deg, var(--night), var(--violet-deep));
+  border: 1px solid rgba(38,33,92,0.09);
+}
+/* night-blue veil + title, so the dark still reads as a video, not an empty box */
+.video__embed::after {
+  content: ""; position: absolute; inset: 0; z-index: 1; pointer-events: none;
+  background: linear-gradient(to top, rgba(26,22,64,0.86) 0%, rgba(26,22,64,0.45) 55%, rgba(26,22,64,0.3) 100%);
+}
+.video__embed.is-playing::after { content: none; }
+.video__label {
+  position: absolute; left: 0; right: 0; bottom: 0; z-index: 2; pointer-events: none;
+  padding: 0.9rem 1.1rem; color: var(--off-white);
+  font-size: 0.9rem; font-weight: 600; line-height: 1.35;
+  text-shadow: 0 2px 10px rgba(26,22,64,0.7);
+}
+.video__embed img, .video__embed iframe {
+  position: absolute; inset: 0; width: 100%; height: 100%; border: 0; object-fit: cover;
+}
+.video__play {
+  position: absolute; inset: 0; width: 100%; height: 100%; z-index: 3;
+  display: flex; align-items: center; justify-content: center;
+  background: transparent; border: 0; cursor: pointer;
+  transition: background 0.3s var(--ease);
+}
+.video__play:hover { background: rgba(26,22,64,0.14); }
+.video__play:focus-visible { outline: 3px solid var(--violet-light); outline-offset: -4px; }
+.video__icon {
+  display: flex; align-items: center; justify-content: center;
+  width: 62px; height: 62px; border-radius: 50%; padding-left: 5px;
+  background: rgba(255,255,255,0.94); color: var(--violet-deep); font-size: 1.3rem;
+  box-shadow: 0 6px 22px rgba(26,22,64,0.35);
+  transition: transform 0.3s var(--ease);
+}
+.video__play:hover .video__icon { transform: scale(1.08); }
+.video figcaption { color: var(--ink-soft); font-size: 0.82rem; margin-top: 0.6rem; margin-bottom: 2.5rem; }
+
 .callout {
   margin-top: 1.4rem; padding: 1.1rem 1.3rem; border-left: 3px solid var(--violet);
-  background: rgba(127,119,221,0.07); border-radius: 0 12px 12px 0; color: var(--violet-deep); font-style: italic; max-width: 62ch;
+  background: rgba(127,119,221,0.07); border-radius: 0 12px 12px 0; color: var(--violet-deep); font-style: italic; max-width: var(--w-mid);
 }
 .note-conf {
   margin-top: 1rem; font-size: 0.85rem; color: var(--ink-soft); background: rgba(92,34,51,0.06);
-  border: 1px solid rgba(92,34,51,0.16); border-radius: 10px; padding: 0.7rem 0.95rem; max-width: 62ch;
+  border: 1px solid rgba(92,34,51,0.16); border-radius: 10px; padding: 0.7rem 0.95rem; max-width: var(--w-mid);
 }
 
 .proj-nav { border-top: 1px solid rgba(38,33,92,0.1); margin-top: 3rem; padding-top: 2rem; display: flex; flex-wrap: wrap; gap: 1rem; justify-content: space-between; }
+
+/* Project pages use a wider page measure so large screens don't leave a big
+   empty band on either side. Scoped to the body class, so the home stays 1120. */
+.page-project { --maxw: var(--maxw-proj); }
+
+/* ---------- Recap rail (sticky sidebar) ---------- */
+.recap {
+  background: #fff; border: 1px solid rgba(38,33,92,0.1); border-radius: 14px;
+  padding: 1.4rem 1.5rem; box-shadow: 0 12px 30px -26px rgba(13,17,48,0.4);
+}
+.recap__title {
+  font-size: 0.72rem; letter-spacing: 0.16em; text-transform: uppercase; font-weight: 700;
+  color: var(--violet); margin-bottom: 1.1rem;
+  display: flex; align-items: center; gap: 0.5rem;
+}
+.recap__title::before { content: "✦"; color: var(--violet-light); font-size: 0.85em; }
+.recap dl { display: grid; gap: 0.95rem; margin: 0; }
+.recap__row { display: grid; gap: 0.2rem; }
+.recap__row dt { font-size: 0.68rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-soft); }
+.recap__row dd { margin: 0; font-weight: 600; color: var(--violet-deep); font-size: 0.96rem; line-height: 1.35; }
+/* On mobile the rail is a summary card at the top; give it a little breathing
+   room and a slightly lighter presence than the content below. */
+@media (max-width: 979px) {
+  .proj-aside { margin-bottom: 0.5rem; }
+  .recap dl { grid-template-columns: 1fr 1fr; gap: 1rem 1.4rem; }
+}
+@media (max-width: 520px) { .recap dl { grid-template-columns: 1fr; } }
 
 /* pending-asset badge */
 .pending {

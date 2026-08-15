@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" data-title-key="__index_title">
+<html lang="en" data-title-key="__index_title" data-path-prefix="">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -7,11 +7,14 @@
   <meta name="description" content="Maëli Fernandez, event project coordinator. Venues, suppliers, budgets, run of show. Based in the French Alps, relocating to Asia in 2027." />
   <meta name="author" content="Maëli Fernandez" />
 
+  <link rel="canonical" href="https://maelifernandez.com/" />
+
   <!-- Open Graph / LinkedIn preview -->
   <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://maelifernandez.com/" />
   <meta property="og:title" content="Maëli Fernandez — Event Project Coordinator" />
   <meta property="og:description" content="Great events look effortless. Mine are planned that way. Relocating to Asia in 2027." />
-  <meta property="og:image" content="assets/og-image.png" />
+  <meta property="og:image" content="https://maelifernandez.com/assets/og-image.png" />
   <meta property="og:image:width" content="1200" />
   <meta property="og:image:height" content="630" />
   <meta name="twitter:card" content="summary_large_image" />
@@ -25,12 +28,13 @@
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400..600;1,9..144,400..600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
 
   <link rel="stylesheet" href="css/style.css" />
+  <script>document.documentElement.classList.add("js");</script>
 </head>
 <body>
   <!-- ============ NAV ============ -->
   <header class="nav">
     <div class="wrap nav__inner">
-      <a class="brand" href="index.html">maëli<span class="star">✦</span></a>
+      <a class="brand" href="index.html">Maëli<span class="star">✦</span></a>
       <nav class="nav__links" aria-label="Primary">
         <a href="#projects" data-i18n="nav.projects">Projects</a>
         <a href="#about" data-i18n="nav.about">About</a>
@@ -55,7 +59,7 @@
           <p class="hero__sub" data-i18n="hero.sub">Event project coordinator — venues, suppliers, budgets, run of show. Based in the French Alps, relocating to Asia in 2027.</p>
           <div class="hero__ctas">
             <a class="btn btn--primary" href="#projects" data-i18n="hero.cta1">See my projects</a>
-            <a class="btn btn--ghost" href="assets/cv/Maeli_Fernandez_CV_EN.pdf" download data-i18n="hero.cta2">Download CV</a>
+            <a class="btn btn--ghost" href="assets/cv/Maeli_Fernandez_CV_EN.pdf" download="Maeli_Fernandez_CV_EN.pdf" hreflang="en" data-i18n="hero.cta2" data-i18n-attr="href:cv.href; download:cv.filename; hreflang:cv.hreflang">Download CV</a>
           </div>
           <div class="hero__meta"><span class="dot"></span><span data-i18n="hero.badge">French Alps → Asia · 2027</span></div>
         </div>
@@ -84,11 +88,14 @@
         </div>
         <div class="cards">
           <a class="card reveal" href="projects/pour-faire-court.html">
-            <div class="card__thumb"><span class="card__index">01</span></div>
+            <div class="card__thumb card__thumb--photo">
+              <img src="assets/img/pfc-regie.jpg" alt="" width="1536" height="2048" loading="lazy" decoding="async" />
+              <span class="card__index">01</span>
+            </div>
             <div class="card__body">
-              <span class="card__tag" data-i18n="p1.tag">Festival · Logistics lead</span>
+              <span class="card__tag" data-i18n="p1.tag">Festival · Logistics co-lead</span>
               <h3 data-i18n="p1.title">Pour Faire Court</h3>
-              <p data-i18n="p1.desc">End-to-end logistics for a one-night short-film festival: venue, suppliers, a €5,000 budget and a 10-person crew on the day.</p>
+              <p data-i18n="p1.desc">Co-leading end-to-end logistics for a one-night short-film festival: venue, suppliers, a €3,500 logistics budget and a 10-person crew on the day.</p>
               <span class="card__more"><span data-i18n="projects.more">View project</span><span class="arrow">→</span></span>
             </div>
           </a>
@@ -130,6 +137,12 @@
               <p data-i18n="vol.1.desc">Festival crew — the world's largest animation festival.</p>
               <p class="years" data-i18n="vol.1.year">2024</p>
             </div>
+            <figure class="vol__shot">
+              <img src="assets/img/annecy-plein-air.jpg"
+                   alt="Open-air screening at the Annecy International Animation Film Festival, the audience gathered in front of the screen at dusk."
+                   width="1080" height="1920" loading="lazy" decoding="async" />
+              <figcaption data-i18n="vol.1.credit">Annecy International Animation Film Festival, 2024 — festival crew.</figcaption>
+            </figure>
           </div>
           <div class="vol reveal">
             <span class="vol__star">✦</span>
@@ -139,6 +152,14 @@
               <p class="years" data-i18n="vol.2.year">2025 · 2026</p>
             </div>
           </div>
+        </div>
+
+        <div class="vol-beyond reveal">
+          <h3 class="vol-beyond__title" data-i18n="vol.beyond.title">Volunteering beyond events</h3>
+          <ul class="vol-beyond__list">
+            <li><span class="vol-beyond__name" data-i18n="vol.3.name">Initea</span> — <span data-i18n="vol.3.role">Head of communications, independent association, 2024 (5 months)</span></li>
+            <li><span data-i18n="vol.4.role">Communications advice for an Annecy-based association (occasional volunteering)</span></li>
+          </ul>
         </div>
       </div>
     </section>
@@ -183,7 +204,7 @@
           <p class="lead" data-i18n="contact.lead">Available for junior event project management roles from spring 2027. I'd be glad to hear from you.</p>
           <div class="contact__actions">
             <a class="btn btn--primary" href="mailto:maelifernandez@free.fr" data-i18n="contact.email">Email me</a>
-            <a class="btn btn--ghost" href="assets/cv/Maeli_Fernandez_CV_EN.pdf" download data-i18n="contact.cv">Download CV (PDF)</a>
+            <a class="btn btn--ghost" href="assets/cv/Maeli_Fernandez_CV_EN.pdf" download="Maeli_Fernandez_CV_EN.pdf" hreflang="en" data-i18n="contact.cv" data-i18n-attr="href:cv.href; download:cv.filename; hreflang:cv.hreflang">Download CV (PDF)</a>
           </div>
           <div class="contact__meta">
             <div>
@@ -207,7 +228,7 @@
   <!-- ============ FOOTER ============ -->
   <footer class="footer">
     <div class="wrap footer__inner">
-      <a class="brand" href="index.html">maëli<span class="star">✦</span></a>
+      <a class="brand" href="index.html">Maëli<span class="star">✦</span></a>
       <span data-i18n="footer.copy">© 2026 Maëli Fernandez. All rights reserved.</span>
       <span data-i18n="footer.built">Built with care in the French Alps.</span>
     </div>

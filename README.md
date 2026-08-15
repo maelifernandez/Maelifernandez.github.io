@@ -21,7 +21,8 @@ portfolio/
 │   ├─ i18n.js                  ← ⭐ ALL THE TEXT (English + French) lives here
 │   └─ main.js                  ← animations (constellations, scroll, marquee)
 ├─ assets/
-│   ├─ cv/Maeli_Fernandez_CV_EN.pdf             ← the downloadable CV
+│   ├─ cv/Maeli_Fernandez_CV_EN.pdf             ← the downloadable CV (English)
+│   ├─ cv/Maeli_Fernandez_CV_FR.pdf             ← the downloadable CV (French)
 │   ├─ favicon.svg              ← the little ✦ browser-tab icon
 │   ├─ og-image.png             ← the preview image shown when the link is shared
 │   └─ img/                     ← put your photos here
@@ -87,9 +88,30 @@ When a section's visuals are all real photos, you can delete the small
 
 - **LinkedIn URL** — already set in `index.html` (Contact section). To change it,
   search for `linkedin.com` and edit the link.
-- **New CV** — replace `assets/cv/Maeli_Fernandez_CV_EN.pdf` with an
-  updated file **of the same name**, and every "Download CV" button keeps working.
-  (To add a French CV later, drop it in `assets/cv/` and we can add a second button.)
+- **New CV** — there are **two** CV files, one per language:
+
+  | Site language | File |
+  |---|---|
+  | English (EN) | `assets/cv/Maeli_Fernandez_CV_EN.pdf` |
+  | French (FR)  | `assets/cv/Maeli_Fernandez_CV_FR.pdf` |
+
+  The "Download CV" buttons follow the EN/FR toggle automatically: in English
+  they hand over the English PDF, in French the French one. The visitor also
+  gets the matching file name when they save it.
+
+  To update a CV, replace the file with an updated one **of the same name** —
+  every "Download CV" button keeps working, nothing else to change.
+
+  If you ever rename a PDF, edit the matching lines in `js/i18n.js` — in the
+  `en:` block for the English CV, in the `fr:` block for the French one:
+
+  ```js
+  "cv.href":     "assets/cv/Maeli_Fernandez_CV_EN.pdf",
+  "cv.filename": "Maeli_Fernandez_CV_EN.pdf",
+  ```
+
+  Write `cv.href` **without** any `../` in front — the project pages add it
+  by themselves.
 
 ---
 
